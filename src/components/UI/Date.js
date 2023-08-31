@@ -1,17 +1,30 @@
 import { View, StyleSheet, Text } from 'react-native';
 
-const Date = ({dateInput}) => {
+const Date = ({dateString}) => {
+    if(dateString) {
+        const year = parseInt(dateString.substring(0, 4));
+        const month = parseInt(dateString.substring(5, 7));
+        const day = parseInt(dateString.substring(8, 10));
+         const monthAbbreviations = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+         const monthAbbreviated = monthAbbreviations[month - 1];
+        return (
+            <View style={styles.container}>
+                    <View style={styles.monthContainer}>
+                        <Text style={styles.monthText}> {monthAbbreviated} </Text>
+                    </View>
+                    <View style={styles.dateContainer}>
+                        <Text style={styles.dateText}> {day} </Text>
+                    </View>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
-                <View style={styles.monthContainer}>
-                    <Text style={styles.monthText}> Aug </Text>
-                </View>
-                <View style={styles.dateContainer}>
-                    <Text style={styles.dateText}> 30 </Text>
-                </View>
-        </View>
-    );
+            <Text>Loading...</Text>
+        </View>    
+    )
+  
 
 }
 

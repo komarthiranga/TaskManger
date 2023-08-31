@@ -1,6 +1,31 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import Item from './Item';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listTasks } from '../../graphql/queries';
+import { useState, useEffect } from 'react';
+import { useRoute } from '@react-navigation/native';
+
 const List = ({today}) => {
+    const route = useRoute();
+    const getListFlag = route.params?.getListFlag;
+    const [loading, setLoading] = useState(true);
+    const [tasks, setTasks] = useState(null)
+
+    useEffect( () => {
+        console.log(' I am her.......');
+        fetchTasks();
+    }, []);
+
+    useEffect( () => {
+        console.log(' I am her.......');
+        fetchTasks();
+    }, [getListFlag]);
+
+    const fetchTasks = async() => {
+        const taskList = await API.graphql(graphqlOperation(listTasks));
+        setTasks(taskList.data?.listTasks?.items)
+        setLoading(false);
+    }
 
     const Data = [
         {
@@ -42,7 +67,8 @@ const List = ({today}) => {
 
     return (
         <View style={styles.container}>
-              <FlatList  data={Data} keyExtractor={ (item) => item.id } renderItem={({item}) => <Item task={item} today={today} /> } />
+              {loading && <View><Text>Loading Please wait !!!</Text></View>}
+              {!loading && <FlatList  data={tasks} keyExtractor={ (item) => item.id } renderItem={({item}) => <Item task={item} today={today} /> } /> }
         </View>
     )
 

@@ -1,9 +1,12 @@
 import { SafeAreaView, View, Text, TextInput, StyleSheet } from 'react-native';
 import Button from '../UI/Button';
 import { useState } from 'react';
+import { API, graphqlOperation } from 'aws-amplify';
+import { createTask } from '../../graphql/mutations';
+import { useNavigation } from '@react-navigation/native';
 
 const Create = () => {
-
+    const navigation = useNavigation();
     const [task, setTask] = useState({
         title: '',
         description: ''
@@ -11,8 +14,20 @@ const Create = () => {
 
     const handleTaskChange = (key, value) => setTask({...task, [key]: value})
 
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
         console.log(task);
+        try {
+            const taskInst = {
+                title: task.title,
+                status: 'NEW',
+                description: task.description
+            }
+            const persistTask = await API.graphql(graphqlOperation(createTask, {input: taskInst}))
+            navigation.navigate("TodayTaskList", {getListFlag: true});
+
+        } catch(error) {
+            console.error(error);
+        }
     }
 
     return (
