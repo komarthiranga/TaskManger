@@ -1,9 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import TaskList from './src/screens/taskList';
 import AppRouting from './src/routing';
+import { Amplify } from 'aws-amplify';
+import awsconfig from './src/aws-exports';
+import { withAuthenticator } from 'aws-amplify-react-native';
 
-export default function App() {
+Amplify.configure({ ...awsconfig, Analytics: { disabled: true } });
+
+const App = () => {
   return (
     <>
       <StatusBar style="auto" />
@@ -11,3 +14,5 @@ export default function App() {
     </>
   );
 }
+
+export default withAuthenticator(App);

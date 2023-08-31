@@ -1,8 +1,8 @@
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-const Button = ({children}) => {
+const Button = ({children, onPress}) => {
 
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={onPress}>
             <View style={styles.innerContainer}>
                  <Text style={styles.text}>{children}</Text>
             </View>
